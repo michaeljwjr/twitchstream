@@ -1,17 +1,47 @@
 #!/bin/bash
+## The following is a script for streaming to twitch.tv if you have any questions send me an email at michaeljwjr@gmail.com
+## Twitch channel twitch.tv/soulstitchmmo
+## Personal G+ https://plus.google.com/106295000788676760101/posts
+## Gaming on Linux Google Community:  https://plus.google.com/communities/107473457673091339260
+
+
+### Settings ###
+### INRES is the resolution of the desktp you're capturing from
+### OUTRES is the resolution you want to broadcast to, I found 1280x720 to be a fair HD setting
+### FPS set to what you like 20 works just fine for me but you can raise this or lower this depending on your hardware
+### Qual preset can be set to veryslow, slow, medium, fast, veryfast (among others) veryslow is best quality
+### Font, chosen from your /usr/share/fonts/ directory
+### watermark can be any message you like
 
 INRES="1920x1080"
 OUTRES="1280x720"
 FPS="20"
-QUAL="medium"
+QUAL="medium" 
 FONT="/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf"
-STREAM_KEY=$(cat ~/.twitch_key)
+WATERMARK='Soulstitchmmo Gaming on Ubuntu 14.04'
+
+## you must create a .twitch_key file and paste your twitch key there
+## you can get your twitch key from http://www.twitch.tv/<YOUR_USERNAME>/dashboard/streamkey
+
+STREAM_KEY=$(cat ~/twitchstream/.twitch_key)
+
+### Stream Command ###
+### x11grab records your desktop. :0.0 is the top left hand corner of the screen
+### the +0,768 moves the top corner of the screen to my bottom monitor, you can remove this if you 
+### are only using one monitor. Or change this depending on the location of your second monitor.
+### (my top montior is 1360x768)
+### I found that using alsa was giving my terrible mic quality so I switched to pulse device directly
+### in terminal type: 
+### pactl list sources | grep Name:
+### to find the list of audio sources. I chose my mic. Working on streaming desktop and mic still.
+### change -qscale, -b and -bufsize to adjust quality. 
 
 avconv -g 0 \
     -f x11grab -s $INRES -r "$FPS" -i :0.0+0,768 \
     -f pulse -i alsa_input.pci-0000_00_1b.0.analog-stereo \
     -vcodec libx264 -s $OUTRES -preset $QUAL \
     -acodec libmp3lame -ar 44100 -threads 4 -qscale 1 -b 712k -bufsize 1024k \
-    -vf drawtext="fontfile=$FONT: text='Soulstitchmmo Gaming on Ubuntu 14.04':\
-    x=950: y=950: fontsize=48: fontcolor=white@0.2" \
+    -vf drawtext="fontfile=$FONT: text=$WATERMARK: x=950: y=950: fontsize=48: fontcolor=white@0.2" \
     -f flv "rtmp://live.justin.tv/app/$STREAM_KEY"
+
+### For further reading please check out the man page for avconv or visit libav.org/avconv.html
