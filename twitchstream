@@ -34,7 +34,9 @@ STREAM_KEY=$(cat ~/twitchstream/.twitch_key)
 ### in terminal type: 
 ### pactl list sources | grep Name:
 ### to find the list of audio sources. I chose my mic. Working on streaming desktop and mic still.
-### change -qscale, -b and -bufsize to adjust quality. 
+### change -qscale, -b and -bufsize to adjust quality. Change the x/y drawtext position of drawtext to 
+### locate watermark where ever you want it. 
+
 
 avconv -g 0 \
     -f x11grab -s $INRES -r "$FPS" -i :0.0+0,768 \
