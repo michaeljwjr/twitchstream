@@ -16,7 +16,7 @@
 INRES="1920x1080"
 OUTRES="1280x720"
 FPS="20"
-QUAL="veryslow" 
+QUAL="veryfast" 
 FONT="/usr/share/fonts/truetype/ubuntu-font-family/Ubuntu-B.ttf"
 WATERMARK='Soulstitchmmo Gaming on Ubuntu 14.04'
 
@@ -33,13 +33,17 @@ STREAM_KEY=$(cat ~/twitchstream/.twitch_key)
 ### I found that using alsa was giving my terrible mic quality so I switched to pulse device directly
 ### in terminal type: 
 ### pactl list sources | grep Name:
-### to find the list of audio sources. I chose my mic. Working on streaming desktop and mic still.
-### change -qscale, -b and -bufsize to adjust quality. Change the x/y drawtext position of drawtext to 
-### locate watermark where ever you want it. 
+### to find the list of audio sources. The top choice is my mic(input) and my desktop(output). Use 
+### pavucontrol (sudo apt-get install pavucontrol) to make sure you're recording buil-in audio and
+### monitor of built-in audio to get mic and desktop respectively. change -qscale, -b and -bufsize 
+### to adjust quality. Change the x/y drawtext position of drawtext to locate watermark where ever
+### you want it. 
 
 avconv \
     -f x11grab -s $INRES -r "$FPS" -i :0.0+0,768 \
     -f pulse -i "alsa_input.pci-0000_00_1b.0.analog-stereo" \
+    -f pulse -i "alsa_output.pci-0000_00_1b.0.analog-stereo.monitor" \
+    -filter_complex amix=inputs=2:duration=first \
     -vf drawtext="fontfile=$FONT: text=$WATERMARK: x=950: y=950: fontsize=48: fontcolor=white@0.2" \
     -vcodec libx264 -s $OUTRES -preset $QUAL \
     -acodec libmp3lame -ar 44100 -threads 4 -qscale 1 -b 712k -bufsize 1024k \
