@@ -1,5 +1,8 @@
 #!/bin/bash
 ## The following is a script for streaming to twitch.tv if you have any questions send me an email at michaeljwjr@gmail.com
+## Written in Ubuntu 14.04, other distros/setups will have to adapt script to their setup
+##
+## Contact Information
 ## Twitch channel twitch.tv/soulstitchmmo
 ## Personal G+ https://plus.google.com/106295000788676760101/posts
 ## Gaming on Linux Google Community:  https://plus.google.com/communities/107473457673091339260
@@ -15,7 +18,7 @@
 
 INRES="1920x1080"
 OUTRES="1280x720"
-FPS="20"
+FPS="24"
 QUAL="veryfast" 
 LOGO1="/home/michaeljwjr/Pictures/graveldogfaded.png"
 LOGO2="/home/michaeljwjr/Pictures/soulstitchmmo.png"
