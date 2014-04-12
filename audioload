@@ -1,0 +1,6 @@
+#!/bin/bash
+
+pactl load-module module-null-sink sink_name=Virtual1 sink_properties=device.description="mic+desktop"
+pactl load-module module-loopback sink=Virtual1
+pactl load-module module-loopback sink=Virtual1
+pactl list sources | grep Name: 

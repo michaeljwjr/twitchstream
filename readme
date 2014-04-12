@@ -1,0 +1,40 @@
+Ok so the following an explanation of how these scripts work. All information I've gathered mostly from
+https://libav.org/avconv.html and http://manpages.ubuntu.com/manpages/trusty/en/man1/avconv.1.html so 
+please use both sources as often as possible when trying to set these up for your system. 
+
+My script will allow you to run a camera and two logos as overlays on  your game. It will also stream and sync your microphone and your desktop sounds quite perfectly. 
+
+Installations you're going to need:
+pavucontrol 
+libav
+pulseaudio
+
+/*** This script was written in Ubuntu 14.04 with pulseaudio. If you're only running alsa you're going to have to change the -f pulse -i "Virtual1.monitor" \ to correspond with your alsa installation. If you have no idea try replacing that line with: 
+
+-f alsa -ac 2 -i pulse \
+***/
+
+Create a file for your twitchkey which can be obtained by logging in as you and visiting this link: 
+http://www.twitch.tv/<YOUR_USERNAME>/dashboard/streamkey
+
+Please remember to switch <YOUR_USERNAME> with your username. Paste your twitch key into your favorite text editor, and save it as .twitch_key. 
+
+Now run the audioload script which will loop your desktop and mic into one output. 
+
+Now run the twitchstream script, and follow the instructions that are in the that script for setting it up the rest of the way. Good Luck, and Good Streaming. 
+
+
+Troubleshooting:
+The -f x11grab line is written, to screen capture 1920x1080 (INRES) starting at position 0.0, however 
+because I have dual monitors (top is 1360x768 and bottom is 1920x1080) I had to move 0.0 down 768 pixels. 
+
+If you're only running one monitor, then you can remove the +0,768 from the x11grab line. 
+
+The overlay, is written for a 1920x1080 screen, you'll need to move those around as well. 
+
+Any questions/concerns feel free to message me:
+
+## Twitch channel twitch.tv/soulstitchmmo
+## Personal G+ https://plus.google.com/106295000788676760101/posts
+## Gaming on Linux Google Community:  https://plus.google.com/communities/107473457673091339260
+
