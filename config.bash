@@ -3,6 +3,7 @@
 ### Settings ###
 ### INRES is the resolution of the desktp you're capturing from
 ### OUTRES is the resolution you want to broadcast to, I found 1280x720 to be a fair HD setting
+### USE_WEBCAM true if the webcam should be enabled and false otherwise
 ### WEBSIZE <TODO> ??? Something to do with the webcame I suspose
 ### FPS set to what you like 20 works just fine for me but you can raise this or lower this depending on your hardware
 ### Qual preset can be set to veryslow, slow, medium, fast, veryfast (among others) veryslow is best quality
@@ -15,6 +16,7 @@
 
 INRES="1920x1080"
 OUTRES="1280x720"
+USE_WEBCAM=false
 WEBSIZE="qvga"
 FPS="20"
 QUAL="veryfast" 

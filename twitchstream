@@ -57,6 +57,10 @@ else
     FILTER="-filter_complex 'overlay=10:H-h-820,overlay=10:H-h-10,overlay=1170:H-h-20'"
 fi
 
+if [ $USE_WEBCAM == false ]; then
+    FILTER=""
+fi
+
 avconv \
     $GRAB \
     -f video4linux2 -video_size $WEBSIZE \
