@@ -8,26 +8,12 @@
 ## Gaming on Linux Google Community:  https://plus.google.com/communities/107473457673091339260
 
 
-### Settings ###
-### INRES is the resolution of the desktp you're capturing from
-### OUTRES is the resolution you want to broadcast to, I found 1280x720 to be a fair HD setting
-### FPS set to what you like 20 works just fine for me but you can raise this or lower this depending on your hardware
-### Qual preset can be set to veryslow, slow, medium, fast, veryfast (among others) veryslow is best quality
-### You can add as many logo's as you like using the overlay information found here: 
-### http://manpages.ubuntu.com/manpages/trusty/en/man1/avconv.1.html
-
-INRES="1920x1080"
-OUTRES="1280x720"
-WEBSIZE="qvga"
-FPS="20"
-QUAL="veryfast" 
-LOGO1="/home/michaeljwjr/Pictures/graveldogfaded.png"
-LOGO2="/home/michaeljwjr/Pictures/soulstitchmmo.png"
+source config.bash
 
 ### you must create a .twitch_key file and paste your twitch key there
 ### you can get your twitch key from http://www.twitch.tv/<YOUR_USERNAME>/dashboard/streamkey
 
-STREAM_KEY=$(cat ~/twitchstream/.twitch_key)
+STREAM_KEY=`cat "$STREAM_KEY_PATH"`
 
 ### Stream Command ###
 ### x11grab records your desktop. :0.0 is the top left hand corner of the screen
@@ -42,13 +28,42 @@ STREAM_KEY=$(cat ~/twitchstream/.twitch_key)
 ### monitor of built-in audio to get mic and desktop respectively. change -qscale, -b and -bufsize 
 ### to adjust quality. 
 
+GRAB="-f x11grab -s $INRES -framerate $FPS -i :0.0+0,768"
+if [ $DUAL_SCREENS == false ]; then
+    GRAB="-f x11grab -s $INRES -framerate $FPS -i :0.0"
+fi 
+
+REQUIRE_FILTER=0
+
+if [ $LOGO1_PATH == "undef" ]; then
+    LOGO1=""
+else
+    LOGO1="-i $LOGO1_PATH"
+    REQUIRE_FILTER=REQUIRE_FILTER+1
+fi
+
+if [ $LOGO2_PATH == "undef" ]; then
+    LOGO2=""
+else
+    LOGO2="-i $LOGO2_PATH"
+    REQUIRE_FILTER=REQUIRE_FILTER+1
+fi
+
+if [ $REQUIRE_FILTER == 0 ]; then
+    FILTER="-filter_complex 'overlay=10:H-h-820'"
+elif [ $REQUIRE_FILTER == 1 ]; then
+    FILTER="-filter_complex 'overlay=10:H-h-820,overlay=1170:H-h-20'"
+else
+    FILTER="-filter_complex 'overlay=10:H-h-820,overlay=10:H-h-10,overlay=1170:H-h-20'"
+fi
+
 avconv \
-    -f x11grab -s $INRES -framerate "$FPS" -i :0.0+0,768 \
+    $GRAB \
     -f video4linux2 -video_size $WEBSIZE \
     -i /dev/video0 \
-    -i $LOGO1 \
-    -i $LOGO2 \
-    -filter_complex 'overlay=10:H-h-820,overlay=10:H-h-10,overlay=1170:H-h-20' \
+    $LOGO1 \
+    $LOGO2 \
+    $FILTER \
     -f pulse -i "Virtual1.monitor" \
     -vcodec libx264 -s $OUTRES -preset $QUAL \
     -acodec libmp3lame -ar 44100 -threads 4 -qscale 5 -b 2048k -bufsize 512k \
